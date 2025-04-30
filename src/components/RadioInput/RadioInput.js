@@ -24,7 +24,6 @@ function RadioInput({name, label, options, styles: inputStyles, value, setValue,
                 onChange={event => {
                   const nextValue = event.target.value;
                   setValue(event.target.value);
-                  console.log(`Set ${name} value to: ${nextValue}`)
                 }}
                 {...delegated}
               />
