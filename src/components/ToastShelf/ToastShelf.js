@@ -1,9 +1,15 @@
 import React from 'react';
 
 import Toast from '../Toast';
+import { ToastContext } from '../ToastProvider';
+
 import styles from './ToastShelf.module.css';
 
-function ToastShelf({toasts, removerById}) {
+
+
+function ToastShelf() {
+  const { toasts, removeToast : removerById } = React.useContext(ToastContext);
+
   return (
     <ol className={styles.wrapper}>
       {
@@ -11,7 +17,7 @@ function ToastShelf({toasts, removerById}) {
           return (
               <li 
               className={styles.toastWrapper}
-              id={id}
+              key={id}
               >
                 <Toast 
                   variant={variant}
