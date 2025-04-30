@@ -18,10 +18,16 @@ function ToastProvider({ children }) {
     setActiveToasts(newToasts);
   }
 
+  function removeAllToasts() {
+    const newToasts = [];
+    setActiveToasts(newToasts);
+  }
+
   const ctx = {
     toasts: activeToasts,
     addToast,
     removeToast,
+    removeAllToasts
   }
 
   return <ToastContext.Provider value={ctx}>
