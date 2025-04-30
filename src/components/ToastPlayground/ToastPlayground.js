@@ -3,6 +3,7 @@ import React from 'react';
 import Button from '../Button';
 import TextInput from '../TextInput';
 import RadioInput from '../RadioInput';
+import Toast from '../Toast';
 
 import styles from './ToastPlayground.module.css';
 
@@ -12,11 +13,18 @@ function ToastPlayground() {
   const [variant, setVariant] = React.useState('notice');
   const [message, setMessage] = React.useState('');
 
+  const [showToast, setShowToast] = React.useState(false);
+
   function handleSubmit(event) {
     event.preventDefault();
     console.log("Toasted this:", {variant, message})
     // setMessage('');
+    setShowToast(true);
   };
+  
+  function handleDismiss(event) {
+    setShowToast(false);
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -24,6 +32,12 @@ function ToastPlayground() {
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
+
+      {showToast && <Toast 
+        message={message}
+        variant={variant}
+        handleDismiss={handleDismiss}
+      />}
 
       <div className={styles.controlsWrapper}>
         <form
