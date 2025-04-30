@@ -3,28 +3,38 @@ import React from 'react';
 import Button from '../Button';
 import TextInput from '../TextInput';
 import RadioInput from '../RadioInput';
-import Toast from '../Toast';
 
 import styles from './ToastPlayground.module.css';
+import ToastShelf from '../ToastShelf/ToastShelf';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
-  const [variant, setVariant] = React.useState('notice');
-  const [message, setMessage] = React.useState('');
+  const defaultVariant = VARIANT_OPTIONS[0];
+  const [inputVariant, setInputVariant] = React.useState(defaultVariant);
+  const [inputMessage, setInputMessage] = React.useState('');
 
-  const [showToast, setShowToast] = React.useState(false);
+  const [activeToasts, setActiveToasts] = React.useState([])
+
+  function addToast({message, variant}) {
+    const id = crypto.randomUUID();
+    const newToast = {message, variant, id};
+    const newActiveToasts = [...activeToasts, newToast];
+
+    setActiveToasts(newActiveToasts);
+  }
+
+  function removeToast(id_to_remove) {
+    const newToasts = activeToasts.filter(({id}) => id != id_to_remove)
+    setActiveToasts(newToasts);
+  }
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("Toasted this:", {variant, message})
-    // setMessage('');
-    setShowToast(true);
+    addToast({variant: inputVariant, message: inputMessage});
+    setInputMessage('');
+    setInputVariant(defaultVariant);
   };
-  
-  function handleDismiss(event) {
-    setShowToast(false);
-  }
 
   return (
     <div className={styles.wrapper}>
@@ -33,11 +43,10 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      {showToast && <Toast 
-        message={message}
-        variant={variant}
-        handleDismiss={handleDismiss}
-      />}
+      <ToastShelf 
+        toasts={activeToasts}
+        removerById={removeToast}
+      />
 
       <div className={styles.controlsWrapper}>
         <form
@@ -46,8 +55,8 @@ function ToastPlayground() {
           <div className={styles.row}>
             <TextInput 
                 label='Message'
-                value={message} 
-                setValue={setMessage}
+                value={inputMessage} 
+                setValue={setInputMessage}
                 styles={styles} 
             />
           </div>
@@ -58,8 +67,8 @@ function ToastPlayground() {
                 name='variant'
                 options={VARIANT_OPTIONS}
                 styles={styles}
-                value={variant}
-                setValue={setVariant}
+                value={inputVariant}
+                setValue={setInputVariant}
               />
           </div>
 
