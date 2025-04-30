@@ -2,29 +2,15 @@ import React from 'react';
 
 import Toast from '../Toast';
 import { ToastContext } from '../ToastProvider';
+import useKeyPress from '../../hooks/useKeyPress';
 
 import styles from './ToastShelf.module.css';
-
-
 
 function ToastShelf() {
   const { toasts, removeToast : removerById, removeAllToasts } = React.useContext(ToastContext);
 
   // Allowing users to press Escape to remove all toasts
-  React.useEffect(() => {
-    function handleKeyDown(event) {
-      console.log('Pressed a key.')
-      if (event.code === 'Escape') {
-        removeAllToasts();
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
+  useKeyPress('Escape', removeAllToasts);
 
   return (
     <ol className={styles.wrapper}>
